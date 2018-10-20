@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT || 8080, () => {
-    console.log(`Server running` )
+    console.log(`Server running ${process.env.PORT || 8080}` )
 })
 
 app.use("/suppliers", SuppliersRoutes);
