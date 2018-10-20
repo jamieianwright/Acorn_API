@@ -16,13 +16,13 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     knex('supplier').insert(req.body).then( result => {
-        res.send(result)
+        res.json(result)
     })
 })
 
 router.put('/:id', (req, res) => {
-    knex('supplier').update(req.body).then( result => {
-        res.send(result)
+    knex('supplier').where('id', req.params.id).update(req.body).then( result => {
+        res.json(result)
     })
 })
 
