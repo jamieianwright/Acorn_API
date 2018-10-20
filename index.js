@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 var SuppliersRoutes = require("./routes/supplier_router");
+const dotenv = require('dotenv').config();
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT || 8080, () => {
+    console.log(process.env)
     console.log(`Server running ${process.env.PORT || 8080}` )
 })
 

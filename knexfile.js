@@ -1,8 +1,9 @@
 module.exports = {
     client: 'mysql',
     connection: {
-      user: 'root',
-      password: 'password',
-      database: 'titan_api'
+      host: process.env.HOST,
+      user: process.env.USER,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE
     }
 }
