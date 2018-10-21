@@ -12,7 +12,6 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT || 8080, () => {
-    console.log(process.env)
     console.log(`Server running ${process.env.PORT || 8080}` )
 })
 
