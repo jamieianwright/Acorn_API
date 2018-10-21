@@ -3,7 +3,7 @@ var router = express.Router({mergeParams: true});
 const knex = require('knex')(require('../knexfile')); 
 
 router.get("/", (req, res) => {
-    knex('supplier').then(suppliers => {
+    knex('supplier').where('is_deleted', 0).then(suppliers => {
         res.json(suppliers)
     })
 });
@@ -26,5 +26,10 @@ router.put('/:id', (req, res) => {
     })
 })
 
+router.delete('/:id', (req, res) => {
+    knex('supplier').where('id', req.params.id).update('is_deleted', 1).then( result => {
+        res.json(result)
+    })
+})
 
 module.exports = router;
