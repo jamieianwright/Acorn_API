@@ -1,9 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 var SuppliersRoutes = require("./routes/supplier_router");
+const cors = require('cors')
 
 const app = express()
-
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
