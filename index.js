@@ -1,9 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-var SuppliersRoutes = require("./routes/supplier_router");
+const SuppliersRoutes = require("./routes/supplier_router");
+const UsersRouter = require("./routes/user_router");
 const cors = require('cors')
+const passport = require('./config/passport')
 
 const app = express()
+
+app.use(passport.initialize())
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -17,3 +21,4 @@ app.listen(process.env.PORT || 8080, () => {
 })
 
 app.use("/suppliers", SuppliersRoutes);
+app.use("/", UsersRouter);

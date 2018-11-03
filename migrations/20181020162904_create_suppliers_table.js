@@ -1,6 +1,6 @@
 
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('supplier', function (table) {
+    return knex.schema.createTable('suppliers', function (table) {
         table.increments('id').primary()
         table.string('name').notNullable()
         table.string('phone_number').notNullable()
@@ -11,5 +11,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.dropTableIfExists('supplier')
+    return knex.schema.dropTableIfExists('suppliers')
 };
