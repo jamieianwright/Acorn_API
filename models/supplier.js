@@ -1,7 +1,7 @@
 const db = require('../database');
 
 const Supplier = db.Model.extend({
-    tableName: 'supplier'
+    tableName: 'suppliers'
 });
 
 module.exports = Supplier;
