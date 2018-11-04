@@ -1,7 +1,8 @@
 var express = require("express");
 var router = express.Router({mergeParams: true});
-const User = require('../models/user')
+const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const passport = require('../config/passport')
 
 router.post("/register", (req, res) => {
     if(!req.body.email || !req.body.password){
@@ -31,5 +32,9 @@ router.post('/login', (req, res) => {
     })
     .then((result) => res.json(result))
 })
+
+router.get('/getUser', passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.send(req.user);
+});
 
 module.exports = router;

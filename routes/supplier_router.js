@@ -3,7 +3,9 @@ const router = express.Router({mergeParams: true});
 const Supplier = require('../models/supplier');
 const passport = require('../config/passport')
 
-router.get("/", passport.authenticate('jwt', { session: false }),(req, res) => {
+router.get("/", 
+// passport.authenticate('jwt', { session: false })
+(req, res) => {
     Supplier.where('is_deleted', 0)
     .fetchAll({columns: ['id', 'name','phone_number','website', 'email']})
     .then(suppliers => res.json(suppliers))
