@@ -5,15 +5,18 @@ const jwt = require('jsonwebtoken');
 const passport = require('../config/passport')
 
 router.post("/register", (req, res) => {
+    var pattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
     if(!req.body.email || !req.body.password){
-        return res.sendStatus(401).send('Please enter your email and password.');
+        return res.status(401).send('Please enter your email and password.');
+    } else if(!pattern.test(req.body.password)){
+        return res.status(401).send('Password must be longer than 8 characters, have at least one lower case letter, one upper case letter and a number.');
     } else {
         const user = new User ({
             email: req.body.email,
             password: req.body.password
         })
         user.save()
-        .then((saved) => res.json(saved))
+        .then((saved) => res.status(200).send(`New user registered with email of ${saved.attributes.email}`))
     }
 });
 
