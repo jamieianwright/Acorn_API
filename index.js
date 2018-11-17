@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const SuppliersRoutes = require("./routes/supplier_router");
+const ComponentsRoutes = require("./routes/supplier_router");
 const UsersRouter = require("./routes/user_router");
 const cors = require('cors')
 const passport = require('./config/passport')
