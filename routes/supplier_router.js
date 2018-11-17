@@ -19,6 +19,18 @@ router.get("/:id", (req, res) => {
     .catch((err) => res.status(500).send(err))
 })
 
+router.get("/:id/components", (req, res) => {
+    Supplier.where('id', req.params.id)
+    .fetchAll({
+        withRelated: [{'components': function(qb) {
+            qb.column('name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id');
+        }}],
+        columns: ['id', 'name', 'website', 'email']
+    })
+    .then(suppliers => res.json(suppliers))
+    .catch((err) => res.status(500).send(err))
+})
+
 router.post("/", (req, res) => {
     if(!req.body.name || !req.body.phone_number || !req.body.website || !req.body.email){
         res.status(400).send('Required fields missing')

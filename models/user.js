@@ -5,4 +5,4 @@ const User = db.Model.extend({
   hasSecurePassword: 'password_digest'
 });
 
-module.exports = User;
+module.exports = db.model('User', User);;

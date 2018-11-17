@@ -1,11 +1,11 @@
 const db = require('../database');
-const Component = require('./component')
+require('./component');
 
-const Supplier = db.Model.extend({
-    tableName: 'suppliers',
-    components: function() {
-        return this.hasMany(Component);
-    }
+var Supplier = db.Model.extend({
+  tableName: 'suppliers',
+  components: function() {
+    return this.hasMany('Component');
+  }
 });
 
-module.exports = Supplier;
+module.exports = db.model('Supplier', Supplier);

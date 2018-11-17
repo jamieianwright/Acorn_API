@@ -21,4 +21,5 @@ app.listen(process.env.PORT || 8080, () => {
 })
 
 app.use("/suppliers", SuppliersRoutes);
+app.use("/components", ComponentsRoutes);
 app.use("/", UsersRouter);
