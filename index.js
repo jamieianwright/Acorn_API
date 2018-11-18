@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const SuppliersRoutes = require("./routes/supplier_router");
-const ComponentsRoutes = require("./routes/supplier_router");
+const ComponentsRoutes = require("./routes/component_router");
 const UsersRouter = require("./routes/user_router");
 const cors = require('cors')
 const passport = require('./config/passport')
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(process.env.PORT || 8080, () => {
-    console.log(`Server running ${process.env.PORT || 8080}` )
+    console.log(`Server running ${process.env.PORT || 8080}`)
 })
 
 app.use("/suppliers", SuppliersRoutes);
