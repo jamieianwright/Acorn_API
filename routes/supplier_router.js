@@ -18,10 +18,20 @@ router.get("/",
 router.get("/:id", (req, res) => {
     Supplier
         .forge({id: req.params.id})
-        .fetch({
+        .fetchPage({
+            page: req.params.id,
+            pageSize: (req.query.pageSize || 10),
             columns: ['id', 'name', 'phone_number', 'website', 'email']
         })
-        .then(suppliers => res.json(suppliers))
+        .then(suppliers => {
+            const responseObject = {
+                'suppliers': suppliers,
+                'pagination': suppliers.pagination
+            }
+            res
+                .status(200)
+                .json(responseObject)
+        })
         .catch((err) => res.status(500).send(err))
 })
 

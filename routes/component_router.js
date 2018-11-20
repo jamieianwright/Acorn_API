@@ -25,7 +25,9 @@ router.get("/",
 router.get("/:id", (req, res) => {
     Component
         .forge({id: req.params.id})
-        .fetch({
+        .fetchPage({
+            page: req.params.id,
+            pageSize: (req.query.pageSize || 10),
             columns: [
                 'name',
                 'price',
@@ -35,8 +37,16 @@ router.get("/:id", (req, res) => {
                 'supplier_id'
             ]
         })
-        .then(component => res.json(component))
-        .catch((err) => res.status(500).send(err));
+        .then(suppliers => {
+            const responseObject = {
+                'suppliers': suppliers,
+                'pagination': suppliers.pagination
+            }
+            res
+                .status(200)
+                .json(responseObject)
+        })
+        .catch((err) => res.status(500).send(err))
 })
 
 router.get("/:id/supplier", (req, res) => {

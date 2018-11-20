@@ -3,6 +3,7 @@ const bookshelf = require('bookshelf');
 const securePassword = require('bookshelf-secure-password');
 const db = bookshelf(knex);
 db.plugin('registry');
+db.plugin('pagination');
 db.plugin(securePassword);
 
 module.exports = db;

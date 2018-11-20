@@ -10,6 +10,7 @@ exports.up = function(knex, Promise) {
         table.integer('supplier_id').unsigned().notNullable();
         table.boolean('is_deleted').defaultTo(false).notNullable()
         table.foreign('supplier_id').references('id').inTable('suppliers').onDelete('cascade');
+        table.unique('name');
     })
 };
 
