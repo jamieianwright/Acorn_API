@@ -6,31 +6,45 @@ const passport = require('../config/passport')
 router.get("/",
 // passport.authenticate('jwt', { session: false })
 (req, res) => {
-    Supplier
-        .where('is_deleted', 0)
-        .fetchAll({
-            columns: ['id', 'name', 'phone_number', 'website', 'email']
-        })
-        .then(suppliers => res.json(suppliers))
-        .catch((err) => res.status(500).send(err))
+    if (req.query.pageSize && req.query.page) {
+        Supplier
+            .where('is_deleted', 0)
+            .fetchPage({
+                page: req.query.page,
+                pageSize: (req.query.pageSize || 10),
+                columns: ['id', 'name', 'phone_number', 'website', 'email']
+            })
+            .then(suppliers => {
+                const responseObject = {
+                    'suppliers': suppliers,
+                    'pagination': suppliers.pagination
+                }
+                res
+                    .status(200)
+                    .json(responseObject)
+            })
+            .catch((err) => res.status(500).send(err))
+    } else {
+        Supplier
+            .where('is_deleted', 0)
+            .fetchAll({
+                columns: ['id', 'name', 'phone_number', 'website', 'email']
+            })
+            .then(suppliers => res.json(suppliers))
+            .catch((err) => res.status(500).send(err))
+    }
 });
 
 router.get("/:id", (req, res) => {
     Supplier
         .forge({id: req.params.id})
-        .fetchPage({
-            page: req.params.id,
-            pageSize: (req.query.pageSize || 10),
+        .fetch({
             columns: ['id', 'name', 'phone_number', 'website', 'email']
         })
         .then(suppliers => {
-            const responseObject = {
-                'suppliers': suppliers,
-                'pagination': suppliers.pagination
-            }
             res
                 .status(200)
-                .json(responseObject)
+                .json(suppliers)
         })
         .catch((err) => res.status(500).send(err))
 })

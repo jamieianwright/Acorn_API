@@ -6,28 +6,53 @@ const passport = require('../config/passport')
 router.get("/",
 // passport.authenticate('jwt', { session: false })
 (req, res) => {
-    Component
-        .where('is_deleted', 0)
-        .fetchAll({
-            columns: [
-                'name',
-                'price',
-                'description',
-                'lead_time',
-                'min_order_quantity',
-                'supplier_id'
-            ]
-        })
-        .then(components => res.json(components))
-        .catch((err) => res.status(500).send(err));
+    if (req.query.pageSize && req.query.page) {
+        Component
+            .where('is_deleted', 0)
+            .fetchPage({
+                page: req.query.page,
+                pageSize: (req.query.pageSize || 10),
+                columns: [
+                    'name',
+                    'price',
+                    'description',
+                    'lead_time',
+                    'min_order_quantity',
+                    'supplier_id'
+                ]
+            })
+            .then(components => {
+                const responseObject = {
+                    'components': components,
+                    'pagination': components.pagination
+                }
+                res
+                    .status(200)
+                    .json(responseObject)
+            })
+            .catch((err) => res.status(500).send(err))
+    } else {
+        Component
+            .where('is_deleted', 0)
+            .fetchAll({
+                columns: [
+                    'name',
+                    'price',
+                    'description',
+                    'lead_time',
+                    'min_order_quantity',
+                    'supplier_id'
+                ]
+            })
+            .then(components => res.json(components))
+            .catch((err) => res.status(500).send(err))
+    }
 });
 
 router.get("/:id", (req, res) => {
     Component
         .forge({id: req.params.id})
-        .fetchPage({
-            page: req.params.id,
-            pageSize: (req.query.pageSize || 10),
+        .fetch({
             columns: [
                 'name',
                 'price',
@@ -37,14 +62,10 @@ router.get("/:id", (req, res) => {
                 'supplier_id'
             ]
         })
-        .then(suppliers => {
-            const responseObject = {
-                'suppliers': suppliers,
-                'pagination': suppliers.pagination
-            }
+        .then(component => {
             res
                 .status(200)
-                .json(responseObject)
+                .json(component)
         })
         .catch((err) => res.status(500).send(err))
 })
