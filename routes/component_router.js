@@ -6,7 +6,7 @@ const passport = require('../config/passport')
 router.get("/",
 // passport.authenticate('jwt', { session: false })
 (req, res) => {
-    if (req.query.pageSize && req.query.page) {
+    if (req.query.page) {
         Component
             .where('is_deleted', 0)
             .fetchPage({
