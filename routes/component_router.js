@@ -9,6 +9,10 @@ router.get("/",
     if (req.query.page) {
         Component
             .where('is_deleted', 0)
+            .orderBy(req.query.orderBy || 'name', req.query.order ||'asc')
+            .query(function(qb) {
+                qb.where('name', 'LIKE', (req.query.search)? `%${req.query.search}%`: '%%')
+            })
             .fetchPage({
                 page: req.query.page,
                 pageSize: (req.query.pageSize || 10),
