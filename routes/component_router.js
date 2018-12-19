@@ -8,21 +8,28 @@ router.get("/",
 (req, res) => {
     if (req.query.page) {
         Component
-            .where('is_deleted', 0)
-            .orderBy(req.query.orderBy || 'name', req.query.order ||'asc')
-            .query(function(qb) {
-                qb.where('name', 'LIKE', (req.query.search)? `%${req.query.search}%`: '%%')
+            .where('components.is_deleted', 0)
+            .orderBy(req.query.orderBy || 'name', req.query.order || 'asc')
+            .query(function (qb) {
+                qb.leftJoin('suppliers', 'suppliers.id', 'components.supplier_id').where(`${req.query.searchBy || 'components'}.name`, 'LIKE', `%${req.query.search}%`)
             })
             .fetchPage({
                 page: req.query.page,
                 pageSize: (req.query.pageSize || 10),
                 columns: [
-                    'name',
+                    'components.name',
                     'price',
                     'description',
                     'lead_time',
                     'min_order_quantity',
                     'supplier_id'
+                ],
+                withRelated: [
+                    {
+                        'supplier': function (qb) {
+                            qb.column('id', 'name');
+                        }
+                    }
                 ]
             })
             .then(components => {
