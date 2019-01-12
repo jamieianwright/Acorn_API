@@ -9,6 +9,8 @@ router.get("/",
     if (req.query.pageSize && req.query.page) {
         Supplier
             .where('is_deleted', 0)
+            .orderBy(req.query.orderBy || 'name', req.query.order || 'asc')
+            .where(`name`, 'LIKE', `%${req.query.search || ''}%`)
             .fetchPage({
                 page: req.query.page,
                 pageSize: (req.query.pageSize || 10),
