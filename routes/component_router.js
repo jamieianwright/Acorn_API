@@ -11,7 +11,7 @@ router.get("/",
             .where('components.is_deleted', 0)
             .orderBy(req.query.orderBy || 'name', req.query.order || 'asc')
             .query(function (qb) {
-                qb.leftJoin('suppliers', 'suppliers.id', 'components.supplier_id').where(`${req.query.searchBy || 'components'}.name`, 'LIKE', `%${req.query.search}%`)
+                qb.leftJoin('suppliers', 'suppliers.id', 'components.supplier_id').where(`${req.query.searchBy || 'components'}.name`, 'LIKE', `%${req.query.search || ''}%`)
             })
             .fetchPage({
                 page: req.query.page,
