@@ -28,12 +28,11 @@ router.post('/login', (req, res) => {
       return user.authenticate(req.body.password).then((user) => {
           const payload = {id : user.id}
           const token = jwt.sign(payload, process.env.TITAN_API_SECRET_KEY);
-          res.send(token);
+          res.json(token);
       }).catch(err => {
-        return res.status(401).send({ err });
+        return res.status(401).send(err);
       })
     })
-    .then((result) => res.json(result))
 })
 
 router.get('/getUser', passport.authenticate('jwt', { session: false }), (req, res) => {
