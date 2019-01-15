@@ -17,6 +17,7 @@ router.get("/",
                 page: req.query.page,
                 pageSize: (req.query.pageSize || 10),
                 columns: [
+                    'components.id',
                     'components.name',
                     'price',
                     'description',
@@ -47,6 +48,7 @@ router.get("/",
             .where('is_deleted', 0)
             .fetchAll({
                 columns: [
+                    'id',
                     'name',
                     'price',
                     'description',
@@ -65,6 +67,7 @@ router.get("/:id", (req, res) => {
         .forge({id: req.params.id})
         .fetch({
             columns: [
+                'id',
                 'name',
                 'price',
                 'description',
@@ -93,6 +96,7 @@ router.get("/:id/supplier", (req, res) => {
                 }
             ],
             columns: [
+                'id',
                 'name',
                 'price',
                 'description',
