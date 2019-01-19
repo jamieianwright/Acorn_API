@@ -143,11 +143,7 @@ router.delete('/:id', (req, res) => {
         .then(component => {
             Component
                 .where('id', req.params.id)
-                .save({
-                    is_deleted: (component.get('is_deleted') == '0')
-                        ? '1'
-                        : '0'
-                }, {patch: true})
+                .save({is_deleted: '1'}, {patch: true})
                 .then(saved => res.json(saved))
                 .catch((err) => res.status(500).send(err))
         })
