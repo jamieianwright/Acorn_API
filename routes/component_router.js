@@ -10,7 +10,7 @@ router.get("/",
         Component
             .where('components.is_deleted', 0)
             .query(function (qb) {
-                qb.leftJoin('suppliers', 'suppliers.id', 'components.supplier_id').where(`${req.query.searchBy || 'components'}.name`, 'LIKE', `%${req.query.search || ''}%`).orderBy(req.query.orderBy || 'name', req.query.order || 'asc')
+                qb.leftJoin('suppliers', 'suppliers.id', 'components.supplier_id').where(`${req.query.searchBy || 'components.name'}`, 'LIKE', `%${req.query.search || ''}%`).orderBy(req.query.orderBy || 'name', req.query.order || 'asc')
             })
             .fetchPage({
                 page: req.query.page,
