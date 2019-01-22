@@ -54,17 +54,20 @@ router.get("/:id", (req, res) => {
 router.get("/:id/components", (req, res) => {
     Supplier
         .forge({id: req.params.id})
-        .fetchAll({
+        .fetch({
             withRelated: [
                 {
                     'components': function (qb) {
-                        qb.column('name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id');
+                        qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id');
                     }
                 }
             ],
-            columns: ['id', 'name', 'website', 'email']
+            columns: ['id', 'name', 'phone_number', 'website', 'email']
         })
-        .then(suppliers => res.json(suppliers))
+        .then(suppliers => 
+            res
+                .status(200)
+                .json(suppliers))
         .catch((err) => res.status(500).send(err))
 })
 
