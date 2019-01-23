@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router({mergeParams: true});
 const Supplier = require('../models/supplier');
+const Components = require('../models/component')
 const passport = require('../config/passport')
 
 router.get("/",
@@ -102,14 +103,14 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     Supplier
         .where('id', req.params.id)
-        .fetch({columns: ['is_deleted']})
-        .then(supplier => {
-            Supplier
-                .where('id', req.params.id)
+        .save({is_deleted: '1'}, {patch: true})
+        .then(
+            Components
+                .where('supplier_id', req.params.id)
                 .save({is_deleted: '1'}, {patch: true})
-                .then(saved => res.json(saved))
+                .then(res.status(200).send('supplier and components deleted'))
                 .catch((err) => res.status(500).send(err))
-        })
+        )
         .catch((err) => res.status(500).send(err))
 })
 
