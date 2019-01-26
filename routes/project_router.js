@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
         .catch((err) => res.status(500).send(err))
 })
 
-router.get('/:id/components', (req, res) => {
+router.get('/:id', (req, res) => {
     Project
         .forge({id: req.params.id})
         .fetch({
