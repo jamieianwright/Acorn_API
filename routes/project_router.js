@@ -5,6 +5,9 @@ const Project = require('../models/project');
 router.get('/', (req, res) => {
     Project
         .where('projects.is_deleted', 0)
+        .query(function (qb) {
+            qb.where(`projects.name`, 'LIKE', `%${req.query.search || ''}%`).orderBy('name', req.query.order || 'asc')
+        })
         .fetchPage({
             page: req.query.page || 1,
             pageSize: (req.query.pageSize || 10),
