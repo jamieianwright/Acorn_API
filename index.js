@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const SuppliersRoutes = require("./routes/supplier_router");
 const ComponentsRoutes = require("./routes/component_router");
+const ProjectsRoutes = require("./routes/project_router");
 const UsersRouter = require("./routes/user_router");
 const cors = require('cors')
 const passport = require('./config/passport')
@@ -23,4 +24,5 @@ app.listen(process.env.PORT || 8080, () => {
 
 app.use("/suppliers", SuppliersRoutes);
 app.use("/components", ComponentsRoutes);
+app.use("/projects", ProjectsRoutes);
 app.use("/", UsersRouter);
