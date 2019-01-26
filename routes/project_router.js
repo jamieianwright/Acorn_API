@@ -23,6 +23,32 @@ router.get('/', (req, res) => {
                 .status(200)
                 .json(responseObject)
         })
+        .catch((err) => res.status(500).send(err))
+})
+
+router.get('/:id/components', (req, res) => {
+    Project
+        .forge({id: req.params.id})
+        .fetch({
+            withRelated: [
+                {
+                    'components': function (qb) {
+                        qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id');
+                    }
+                }
+            ],
+            columns: [
+                'id',
+                'name',
+                'description'
+            ]
+        })
+        .then(projects => {
+            res
+                .status(200)
+                .json(projects)
+        })
+        .catch((err) => res.status(500).send(err))
 })
 
 module.exports = router;
