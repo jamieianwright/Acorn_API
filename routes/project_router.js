@@ -56,4 +56,18 @@ router.get('/:id', (req, res) => {
         .catch((err) => res.status(500).send(err))
 })
 
+router.post("/", (req, res) => {
+    if (!req.body.name || !req.body.description) {
+        res
+            .status(400)
+            .send('Required fields missing.');
+    } else {
+        Project
+            .forge(req.body)
+            .save()
+            .then(saved => res.json(saved))
+            .catch((err) => res.status(500).send(err))
+    }
+})
+
 module.exports = router;
