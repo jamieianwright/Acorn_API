@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.alterTable('suppliers', function(table) {
+    return knex.schema.alterTable('projects', function(table) {
         table.dropColumn('is_deleted');
         table.dropColumn('is_active');
     })
