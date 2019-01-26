@@ -14,7 +14,8 @@ router.get('/', (req, res) => {
             columns: [
                 'projects.id',
                 'projects.name',
-                'description'
+                'description',
+                'is_active'
             ]
         })
         .then(projects => {
@@ -43,7 +44,8 @@ router.get('/:id/components', (req, res) => {
             columns: [
                 'id',
                 'name',
-                'description'
+                'description',
+                'is_active'
             ]
         })
         .then(projects => {
