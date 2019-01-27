@@ -5,9 +5,6 @@ const Project = require('../models/project');
 router.get('/', (req, res) => {
     Project
         .where('projects.is_deleted', 0)
-        .query(function (qb) {
-            qb.where(`projects.name`, 'LIKE', `%${req.query.search || ''}%`).orderBy('name', req.query.order || 'asc')
-        })
         .fetchPage({
             page: req.query.page || 1,
             pageSize: (req.query.pageSize || 10),
@@ -15,7 +12,7 @@ router.get('/', (req, res) => {
                 'projects.id',
                 'projects.name',
                 'description',
-                'is_active'
+                'is_active',
             ]
         })
         .then(projects => {
@@ -31,13 +28,22 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
+    let componentsPage = req.query.componentsPage || 1;
+    let componentsPageSize = req.query.componentsPage || 10;
+    let componentsOffset = componentsPageSize * (componentsPage - 1)
+
     Project
         .forge({id: req.params.id})
         .fetch({
             withRelated: [
                 {
                     'components': function (qb) {
-                        qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id');
+                        qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id')
+                        .limit(componentsPageSize)
+                        .offset(componentsOffset);
+                    },
+                    'componentsPagination': function (qb) {
+                        qb.count('name as rowCount')
                     }
                 }
             ],
@@ -45,10 +51,27 @@ router.get('/:id', (req, res) => {
                 'id',
                 'name',
                 'description',
-                'is_active'
+                'is_active',
             ]
         })
         .then(projects => {
+
+            projects = projects.toJSON();
+
+            projects.components.forEach((component, i) => {
+                delete component._pivot_project_id;
+                delete component._pivot_component_id;
+                component.quantity = component._pivot_quantity
+                delete component._pivot_quantity;
+            })
+
+            projects.componentsPagination = projects.componentsPagination[0];
+            projects.componentsPagination.page= componentsPage;
+            projects.componentsPagination.pageSize = componentsPageSize;
+            projects.componentsPagination.pageCount = Math.ceil(projects.componentsPagination.rowCount / projects.componentsPagination.pageSize);
+            delete projects.componentsPagination._pivot_project_id
+            delete projects.componentsPagination._pivot_component_id
+
             res
                 .status(200)
                 .json(projects)
