@@ -28,8 +28,8 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    let componentsPage = req.query.componentsPage || 1;
-    let componentsPageSize = req.query.componentsPage || 10;
+    let componentsPage = parseInt(req.query.componentsPage) || 1;
+    let componentsPageSize = parseInt(req.query.componentsPageSize) || 10;
     let componentsOffset = componentsPageSize * (componentsPage - 1)
 
     Project
