@@ -39,6 +39,7 @@ router.get('/:id', (req, res) => {
                 {
                     'components': function (qb) {
                         qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id')
+                        .orderBy(req.query.componentOrderBy || 'name', req.query.componentOrder || 'asc')
                         .limit(componentsPageSize)
                         .offset(componentsOffset);
                     },
