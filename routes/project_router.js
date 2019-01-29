@@ -59,19 +59,21 @@ router.get('/:id', (req, res) => {
 
             projects = projects.toJSON();
 
-            projects.components.forEach((component, i) => {
-                delete component._pivot_project_id;
-                delete component._pivot_component_id;
-                component.quantity = component._pivot_quantity
-                delete component._pivot_quantity;
-            })
-
-            projects.componentsPagination = projects.componentsPagination[0];
-            projects.componentsPagination.page= componentsPage;
-            projects.componentsPagination.pageSize = componentsPageSize;
-            projects.componentsPagination.pageCount = Math.ceil(projects.componentsPagination.rowCount / projects.componentsPagination.pageSize);
-            delete projects.componentsPagination._pivot_project_id
-            delete projects.componentsPagination._pivot_component_id
+            if(projects.components.length > 0){
+                projects.components.forEach((component, i) => {
+                    delete component._pivot_project_id;
+                    delete component._pivot_component_id;
+                    component.quantity = component._pivot_quantity
+                    delete component._pivot_quantity;
+                })
+    
+                projects.componentsPagination = projects.componentsPagination[0];
+                projects.componentsPagination.page= componentsPage;
+                projects.componentsPagination.pageSize = componentsPageSize;
+                projects.componentsPagination.pageCount = Math.ceil(projects.componentsPagination.rowCount / projects.componentsPagination.pageSize);
+                delete projects.componentsPagination._pivot_project_id
+                delete projects.componentsPagination._pivot_component_id
+            }   
 
             res
                 .status(200)
