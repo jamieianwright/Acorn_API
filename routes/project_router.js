@@ -94,4 +94,18 @@ router.post("/", (req, res) => {
     }
 })
 
+router.put('/:id', (req, res) => {
+    if (!req.body.name || !req.body.description || !req.body.is_active) {
+        res
+            .status(400)
+            .send('Required fields missing')
+    } else {
+        Project
+            .where('id', req.params.id)
+            .save(req.body, {patch: true})
+            .then(saved => res.json(saved))
+            .catch((err) => res.status(500).send(err))
+    }
+})
+
 module.exports = router;
