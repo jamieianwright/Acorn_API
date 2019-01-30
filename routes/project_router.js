@@ -99,6 +99,15 @@ router.post("/", (req, res) => {
     }
 })
 
+router.post("/:id/component", (req, res) => {
+    Project
+        .where('id', req.params.id)
+        .fetch()
+        .then(project => project.components().attach(req.body))
+        .then(project => res.json(project))
+        .catch((err) => res.status(500).send(err))
+})
+
 router.put('/:id', (req, res) => {
     if (!req.body.name || !req.body.description || !req.body.is_active) {
         res
