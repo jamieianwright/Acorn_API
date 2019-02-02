@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 const Project = require('../models/project');
 
 router.get('/', (req, res) => {
@@ -36,15 +36,15 @@ router.get('/:id', (req, res) => {
     let componentsOffset = componentsPageSize * (componentsPage - 1)
 
     Project
-        .forge({id: req.params.id})
+        .forge({ id: req.params.id })
         .fetch({
             withRelated: [
                 {
                     'components': function (qb) {
-                        qb.column('id','name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id')
-                        .orderBy(req.query.componentOrderBy || 'name', req.query.componentOrder || 'asc')
-                        .limit(componentsPageSize)
-                        .offset(componentsOffset);
+                        qb.column('id', 'name', 'price', 'description', 'lead_time', 'min_order_quantity', 'supplier_id')
+                            .orderBy(req.query.componentOrderBy || 'name', req.query.componentOrder || 'asc')
+                            .limit(componentsPageSize)
+                            .offset(componentsOffset);
                     },
                     'componentsPagination': function (qb) {
                         qb.count('name as rowCount')
@@ -55,28 +55,27 @@ router.get('/:id', (req, res) => {
                 'id',
                 'name',
                 'description',
-                'is_active',
+                'is_active'
             ]
         })
         .then(projects => {
-
             projects = projects.toJSON();
 
-            if(projects.components.length > 0){
+            if (projects.components.length > 0) {
                 projects.components.forEach((component, i) => {
                     delete component._pivot_project_id;
                     delete component._pivot_component_id;
                     component.quantity = component._pivot_quantity
                     delete component._pivot_quantity;
                 })
-    
+
                 projects.componentsPagination = projects.componentsPagination[0];
-                projects.componentsPagination.page= componentsPage;
+                projects.componentsPagination.page = componentsPage;
                 projects.componentsPagination.pageSize = componentsPageSize;
                 projects.componentsPagination.pageCount = Math.ceil(projects.componentsPagination.rowCount / projects.componentsPagination.pageSize);
                 delete projects.componentsPagination._pivot_project_id
                 delete projects.componentsPagination._pivot_component_id
-            }   
+            }
 
             res
                 .status(200)
@@ -116,10 +115,18 @@ router.put('/:id', (req, res) => {
     } else {
         Project
             .where('id', req.params.id)
-            .save(req.body, {patch: true})
+            .save(req.body, { patch: true })
             .then(saved => res.json(saved))
             .catch((err) => res.status(500).send(err))
     }
+})
+
+router.delete('/:id', (req, res) => {
+    Project
+        .where('id', req.params.id)
+        .save({ is_deleted: '1' }, { patch: true })
+        .then(res.status(200).send('Project deleted'))
+        .catch((err) => res.status(500).send(err))
 })
 
 module.exports = router;
