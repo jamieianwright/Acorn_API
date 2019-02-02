@@ -125,7 +125,7 @@ router.delete('/:id', (req, res) => {
     Project
         .where('id', req.params.id)
         .save({ is_deleted: '1' }, { patch: true })
-        .then(res.status(200).send('Project deleted'))
+        .then(saved => res.status(200).send('Project deleted'))
         .catch((err) => res.status(500).send(err))
 })
 

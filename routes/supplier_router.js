@@ -104,11 +104,11 @@ router.delete('/:id', (req, res) => {
     Supplier
         .where('id', req.params.id)
         .save({is_deleted: '1'}, {patch: true})
-        .then(
+        .then(saved => 
             Components
                 .where('supplier_id', req.params.id)
                 .save({is_deleted: '1'}, {patch: true})
-                .then(res.status(200).send('supplier and components deleted'))
+                .then(saved => res.status(200).send('supplier and components deleted'))
                 .catch((err) => res.status(500).send(err))
         )
         .catch((err) => res.status(500).send(err))
