@@ -121,6 +121,15 @@ router.put('/:id', (req, res) => {
     }
 })
 
+router.put('/:id/component', (req, res) => {
+    Project
+        .where('id', req.params.id)
+        .fetch()
+        .then(project => project.components().updatePivot(req.body))
+        .then(project => res.json(project))
+        .catch((err) => res.status(500).send(err))
+})
+
 router.delete('/:id', (req, res) => {
     Project
         .where('id', req.params.id)
