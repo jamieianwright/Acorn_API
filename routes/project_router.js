@@ -131,8 +131,7 @@ router.put('/:id/component', (req, res) => {
         Project
             .where('id', req.params.id)
             .fetch()
-            .then(project => project.components().detach(req.body.component_id))
-            .then(project => project.attach(req.body))
+            .then(project => project.components().updatePivot(req.body, { query: { where: {component_id: req.body.component_id} } }))
             .then(project => res.json(project))
             .catch((err) => res.status(500).send(err))
     }
