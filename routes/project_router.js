@@ -94,12 +94,18 @@ router.post("/", (req, res) => {
 })
 
 router.post("/:id/component", (req, res) => {
-    Project
-        .where('id', req.params.id)
-        .fetch()
-        .then(project => project.components().attach(req.body))
-        .then(project => res.json(project))
-        .catch((err) => res.status(500).send(err))
+    if (!req.body.component_id || !req.body.quantity) {
+        res
+            .status(400)
+            .send('Required fields missing')
+    } else {
+        Project
+            .where('id', req.params.id)
+            .fetch()
+            .then(project => project.components().attach(req.body))
+            .then(project => res.json(project))
+            .catch((err) => res.status(500).send(err))
+    }
 })
 
 router.put('/:id', (req, res) => {
@@ -117,13 +123,19 @@ router.put('/:id', (req, res) => {
 })
 
 router.put('/:id/component', (req, res) => {
-    Project
-        .where('id', req.params.id)
-        .fetch()
-        .then(project => project.components().detach(req.body.component_id))
-        .then(project => project.attach(req.body))
-        .then(project => res.json(project))
-        .catch((err) => res.status(500).send(err))
+    if (!req.body.component_id || !req.body.quantity) {
+        res
+            .status(400)
+            .send('Required fields missing')
+    } else {
+        Project
+            .where('id', req.params.id)
+            .fetch()
+            .then(project => project.components().detach(req.body.component_id))
+            .then(project => project.attach(req.body))
+            .then(project => res.json(project))
+            .catch((err) => res.status(500).send(err))
+    }
 })
 
 router.delete('/:id', (req, res) => {
@@ -137,12 +149,18 @@ router.delete('/:id', (req, res) => {
 })
 
 router.delete('/:id/component', (req, res) => {
-    Project
-        .where('id', req.params.id)
-        .fetch()
-        .then(project => project.components().detach(req.body.component_id))
-        .then(project => res.json(project))
-        .catch((err) => res.status(500).send(err))
+    if (!req.body.component_id) {
+        res
+            .status(400)
+            .send('Required fields missing')
+    } else {
+        Project
+            .where('id', req.params.id)
+            .fetch()
+            .then(project => project.components().detach(req.body.component_id))
+            .then(project => res.json(project))
+            .catch((err) => res.status(500).send(err))
+    }
 })
 
 module.exports = router;
